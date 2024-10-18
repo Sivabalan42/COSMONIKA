@@ -1,4 +1,10 @@
-#(©)Codexbotz
+API_ID = 27180404
+
+API_HASH = '26a65aec3919d01af313a756d55805ae'
+
+Telegram_Bot_Token = '7333102143:AAHfFOh67dIKPCE4DsFn42Sr8YWLSFLbJz8'  # Updated with your actual Telegram Bot Token
+
+Telegram_Private_Channel_ID = -1002244739468  # Updated with your actual Telegram Private Channel ID
 
 from aiohttp import web
 from plugins import web_server
@@ -21,7 +27,7 @@ class Bot(Client):
                 "root": "plugins"
             },
             workers=TG_BOT_WORKERS,
-            bot_token=TG_BOT_TOKEN
+            bot_token=Telegram_Bot_Token
         )
         self.LOGGER = LOGGER
 
@@ -44,25 +50,19 @@ class Bot(Client):
                 self.LOGGER(__name__).info("\nBot Stopped. Join https://t.me/CodeXBotzSupport for support")
                 sys.exit()
         try:
-            db_channel = await self.get_chat(CHANNEL_ID)
+            db_channel = await self.get_chat(Telegram_Private_Channel_ID)  # Updated with your Channel ID
             self.db_channel = db_channel
             test = await self.send_message(chat_id = db_channel.id, text = "Test Message")
             await test.delete()
         except Exception as e:
             self.LOGGER(__name__).warning(e)
-            self.LOGGER(__name__).warning(f"Make Sure bot is Admin in DB Channel, and Double check the CHANNEL_ID Value, Current Value {CHANNEL_ID}")
+            self.LOGGER(__name__).warning(f"Make Sure bot is Admin in DB Channel, and Double check the CHANNEL_ID Value, Current Value {Telegram_Private_Channel_ID}")
             self.LOGGER(__name__).info("\nBot Stopped. Join https://t.me/CodeXBotzSupport for support")
             sys.exit()
 
         self.set_parse_mode(ParseMode.HTML)
         self.LOGGER(__name__).info(f"Bot Running..!\n\nCreated by \nhttps://t.me/CodeXBotz")
         self.LOGGER(__name__).info(f""" \n\n       
-░█████╗░░█████╗░██████╗░███████╗██╗░░██╗██████╗░░█████╗░████████╗███████╗
-██╔══██╗██╔══██╗██╔══██╗██╔════╝╚██╗██╔╝██╔══██╗██╔══██╗╚══██╔══╝╚════██║
-██║░░╚═╝██║░░██║██║░░██║█████╗░░░╚███╔╝░██████╦╝██║░░██║░░░██║░░░░░███╔═╝
-██║░░██╗██║░░██║██║░░██║██╔══╝░░░██╔██╗░██╔══██╗██║░░██║░░░██║░░░██╔══╝░░
-╚█████╔╝╚█████╔╝██████╔╝███████╗██╔╝╚██╗██████╦╝╚█████╔╝░░░██║░░░███████╗
-░╚════╝░░╚════╝░╚═════╝░╚══════╝╚═╝░░╚═╝╚═════╝░░╚════╝░░░░╚═╝░░░╚══════╝
                                           """)
         self.username = usr_bot_me.username
         #web-response
@@ -74,3 +74,4 @@ class Bot(Client):
     async def stop(self, *args):
         await super().stop()
         self.LOGGER(__name__).info("Bot stopped.")
+        
